@@ -16,9 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('/book/:id', 'BookController@show')->name('book')->middleware('auth');
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/comment', 'CommentController@store')->name('comment.store');
+Route::get('/book/{book}', 'BookController@show')->name('book');
