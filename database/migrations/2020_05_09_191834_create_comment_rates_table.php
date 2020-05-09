@@ -14,7 +14,7 @@ class CreateCommentRatesTable extends Migration
     public function up()
     {
         Schema::create('comment_rates', function (Blueprint $table) {
-            $table->unsignedBigInteger("id");
+            $table->bigIncrements("id");
             $table->integer("comment_rate");
             $table->unsignedBigInteger("comment_id");
             $table->unsignedBigInteger("user_id");

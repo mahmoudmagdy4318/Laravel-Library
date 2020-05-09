@@ -20,6 +20,7 @@ class CreateBooksTable extends Migration
             $table->string("author_name");
             $table->integer("quantity");
             $table->string("book_img");
+            $table->unsignedBigInteger('cat_id');
             $table->timestamps();
         });
     }

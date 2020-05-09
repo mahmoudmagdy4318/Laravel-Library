@@ -14,14 +14,12 @@ class CreateBookRatesTable extends Migration
     public function up()
     {
         Schema::create('book_rates', function (Blueprint $table) {
-            $table->unsignedBigInteger("id");
+            $table->bigIncrements("id");
             $table->integer("book_rate");
             $table->unsignedBigInteger("book_id");
             $table->unsignedBigInteger("user_id");
-            $table->unsignedBigInteger("category_id");
             $table->foreign("book_id")->references("id")->on("books");
             $table->foreign("user_id")->references("id")->on("users");
-            $table->foreign("category_id")->references("id")->on("categories");
             $table->timestamps();
         });
     }
