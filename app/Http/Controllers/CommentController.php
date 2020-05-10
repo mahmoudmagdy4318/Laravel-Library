@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\User;
+use Redirect;
+use App\Comment;
+use Auth;
 class CommentController extends Controller
 {
     /**
@@ -34,7 +37,10 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $myRequest = $request->all();
+        $myRequest['user_id'] = Auth::id();
+        Comment::create($myRequest);
+        return Redirect::back()->with('message','Operation Successful !');
     }
 
     /**

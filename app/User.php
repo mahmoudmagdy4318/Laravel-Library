@@ -36,4 +36,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Comments OneToMany Relationship
+    public function usersphones()
+    {
+        return $this->hasMany('App\Comment','user_id');
+    }
 }

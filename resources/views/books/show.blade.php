@@ -20,14 +20,15 @@
                 Fav This Book
             </div>
         </div>
-        <!-- Comments Section -->
+        <!-- Add Comments Section -->
         <div class="row headerDiv">
             <div class="col-8">
-                {!! Form::open(['route' => 'comment.store']) !!}
+                {!! Form::open(['route' => ['comment.store']]) !!}
                     <div class="form-group formTextArea">
                         {!! Form::textArea('comment_body', null, ['class' => 'form-control textAreaField', 'placeholder' => 'Write Your Comment...']) !!}  
                     </div>
-                    {!! Form::submit('Comment', ['class' => 'btn btn-primary']) !!}
+                    {{ Form::hidden('book_id', $book->id) }}
+                    {!! Form::submit('Comment', ['class' => 'btn btn-primary col-12']) !!}
                 {!! Form::close() !!}
                 <br/>
                 @foreach ($errors->all() as $error)
@@ -35,6 +36,22 @@
                     {{$error}}
                 </div>
                 @endforeach
+            </div>
+        </div>
+        <!-- List Comments Section -->
+        <div class="row headerDiv">
+            <div class="col-8">
+                <h3 class="BoldFont">Comments</h3>
+                <div class="card">
+                    <h5 class="card-header">Featured
+                        <div style="float:right;">
+                            *******
+                        </div>
+                    </h5>
+                    <div class="card-body">
+                        <p class="card-text bookFonts">With supporting text below as a natural lead-in to additional content.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

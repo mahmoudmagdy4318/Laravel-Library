@@ -19,5 +19,5 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/comment', 'CommentController@store')->name('comment.store');
+Route::post('/comment', 'CommentController@store')->name('comment.store')->middleware('auth');
 Route::get('/book/{book}', 'BookController@show')->name('book');
