@@ -20,4 +20,6 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/comment', 'CommentController@store')->name('comment.store')->middleware('auth');
-Route::get('/book/{book}', 'BookController@show')->name('book');
+Route::get('/book/{book}', 'BookController@show')->name('book')->middleware('auth');
+
+Route::post('/bookrate', 'BookRateController@store')->name('bookrate.store')->middleware('auth');

@@ -42,4 +42,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Comment','user_id');
     }
+    // Book Rates OneToMany Relationship
+    public function bookRates()
+    {
+        return $this->hasMany('App\BookRate', 'user_id');
+    }
 }

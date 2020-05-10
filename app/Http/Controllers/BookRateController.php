@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Auth;
 use App\User;
-use App\Book;
-use App\Comment;
+use Redirect;
 use App\BookRate;
-class BookController extends Controller
+use Auth;
+use App\Book;
+class BookRateController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -38,7 +38,21 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rate = BookRate::where('user_id', Auth::id())->first();
+        $myRequest = $request->all();
+        $myRequest['user_id'] = Auth::id();
+        // Validation
+        if($myRequest['book_rate'] > 5 || $myRequest['book_rate'] )
+            $myRequest['book_rate'] = 0;
+        if($rate)
+            $rate->update($request->all());
+        else
+            BookRate::create($myRequest);
+        
+        $bookRates = Book::find($myRequest['book_id']);
+        $bookRates->update(['rate' => floor($bookRates->rates()->avg('book_rate'))]);
+        $response = array('avgBookRate' => floor($bookRates->rates()->avg('book_rate')));
+        return response()->json($response); 
     }
 
     /**
@@ -49,10 +63,7 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        
-        $book = Book::find($id);
-        $userRate = BookRate::where('user_id', Auth::id())->first();
-        return view("books.show",['book' => $book, 'comments' => $book->comments, 'user_rate' => $userRate->book_rate]);
+        //
     }
 
     /**

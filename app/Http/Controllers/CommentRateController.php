@@ -3,12 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Auth;
-use App\User;
-use App\Book;
-use App\Comment;
-use App\BookRate;
-class BookController extends Controller
+
+class CommentRateController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -49,10 +45,7 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        
-        $book = Book::find($id);
-        $userRate = BookRate::where('user_id', Auth::id())->first();
-        return view("books.show",['book' => $book, 'comments' => $book->comments, 'user_rate' => $userRate->book_rate]);
+        //
     }
 
     /**
