@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\User;
 use App\Book;
+use App\Comment;
 class BookController extends Controller
 {
     /**
@@ -48,7 +49,7 @@ class BookController extends Controller
     public function show($id)
     {
         $book = Book::find($id);
-        return view("books.show",['book' => $book]);
+        return view("books.show",['book' => $book, 'comments' => $book->comments]);
     }
 
     /**

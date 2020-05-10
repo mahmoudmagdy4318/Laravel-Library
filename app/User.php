@@ -38,7 +38,7 @@ class User extends Authenticatable
     ];
 
     // Comments OneToMany Relationship
-    public function usersphones()
+    public function comments()
     {
         return $this->hasMany('App\Comment','user_id');
     }

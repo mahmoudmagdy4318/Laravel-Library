@@ -10,11 +10,11 @@ class Comment extends Model
     // Book OneToMany Inverse
     public function book()
     {
-        return $this->belongsToMany('App\User', 'book_id');
+        return $this->belongsTo('App\User', 'book_id');
     }
     // User OneToMany Inverse
     public function user()
     {
-        return $this->belongsToMany('App\User', 'user_id');
+        return $this->belongsTo('App\User', 'user_id');
     }
 }
