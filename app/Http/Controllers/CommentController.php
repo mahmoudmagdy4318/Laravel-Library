@@ -39,6 +39,7 @@ class CommentController extends Controller
     {
         $myRequest = $request->all();
         $myRequest['user_id'] = Auth::id();
+        $myRequest['rate'] = 0;
         Comment::create($myRequest);
         return Redirect::back()->with('message','Operation Successful !');
     }
