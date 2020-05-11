@@ -23,3 +23,4 @@ Route::post('/comment', 'CommentController@store')->name('comment.store')->middl
 Route::get('/book/{book}', 'BookController@show')->name('book')->middleware('auth');
 
 Route::post('/bookrate', 'BookRateController@store')->name('bookrate.store')->middleware('auth');
+Route::post('/commentrate', 'CommentRateController@store')->name('commentrate.store')->middleware('auth');

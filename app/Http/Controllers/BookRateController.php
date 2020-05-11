@@ -38,11 +38,11 @@ class BookRateController extends Controller
      */
     public function store(Request $request)
     {
-        $rate = BookRate::where('user_id', Auth::id())->first();
+        $rate = BookRate::where('user_id', Auth::id())->where('book_id', $request->book_id)->first();
         $myRequest = $request->all();
         $myRequest['user_id'] = Auth::id();
         // Validation
-        if($myRequest['book_rate'] > 5 || $myRequest['book_rate'] )
+        if($myRequest['book_rate'] > 5 || $myRequest['book_rate'] < 0)
             $myRequest['book_rate'] = 0;
         if($rate)
             $rate->update($request->all());
