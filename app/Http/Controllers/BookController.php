@@ -8,6 +8,8 @@ use App\User;
 use App\Book;
 use App\Comment;
 use App\BookRate;
+use App\Category;
+
 class BookController extends Controller
 {
     /**
@@ -17,7 +19,9 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
+        $books=Book::all()->sortBy('created_at');
+        $categories=Category::all();
+        return ['books'=>$books,'categories'=>$categories];
     }
 
     /**
@@ -49,7 +53,7 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        
+
         $book = Book::find($id);
         $userRate = BookRate::where('user_id', Auth::id())->first();
         return view("books.show",['book' => $book, 'comments' => $book->comments, 'user_rate' => $userRate->book_rate]);

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/books/list', function () {
+    return view('react');
+});
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -24,3 +28,4 @@ Route::get('/book/{book}', 'BookController@show')->name('book')->middleware('aut
 
 Route::post('/bookrate', 'BookRateController@store')->name('bookrate.store')->middleware('auth');
 Route::post('/commentrate', 'CommentRateController@store')->name('commentrate.store')->middleware('auth');
+Route::get('/books', 'BookController@index')->name('book.index')->middleware('auth');
