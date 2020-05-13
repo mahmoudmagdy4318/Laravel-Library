@@ -67697,6 +67697,7 @@ var BookList = /*#__PURE__*/function (_Component) {
           totalCount = _this$getPagedData.totalCount,
           books = _this$getPagedData.data;
 
+      console.log(this.state.books.length === 0);
       if (this.state.books.length === 0) return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("h3", null, "no books in data base");
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_2___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
         "class": "container"

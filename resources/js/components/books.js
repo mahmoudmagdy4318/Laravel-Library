@@ -75,6 +75,7 @@ class BookList extends Component {
     render() {
         const { pageSize, currentPage, searchQuery } = this.state;
         const { totalCount, data: books } = this.getPagedData();
+        console.log(this.state.books.length===0)
 
         if (this.state.books.length===0) return( <h3>no books in data base</h3>);
         return (
