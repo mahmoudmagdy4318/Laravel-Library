@@ -67585,16 +67585,17 @@ var BookList = /*#__PURE__*/function (_Component) {
 
     _defineProperty(_assertThisInitialized(_this), "state", {
       books: [],
+      filteredBooks: [],
       categories: [],
       selectedCategory: null,
       searchQuery: "",
       currentPage: 1,
-      pageSize: 6
+      pageSize: 6,
+      totalCount: 0
     });
 
     _defineProperty(_assertThisInitialized(_this), "handleCategorySelect", function (category) {
-      console.log(category);
-
+      // console.log(category);
       _this.setState({
         selectedCategory: category,
         searchQuery: "",
@@ -67631,13 +67632,25 @@ var BookList = /*#__PURE__*/function (_Component) {
         });
       } else if (selectedCategory && selectedCategory.id) filtered = allBooks.filter(function (b) {
         return b.cat_id === selectedCategory.id;
-      });
+      }); // console.log(filtered);
 
-      var books = Object(_utils_paginate__WEBPACK_IMPORTED_MODULE_7__["paginate"])(filtered, currentPage, pageSize);
+
+      var books = Object(_utils_paginate__WEBPACK_IMPORTED_MODULE_7__["paginate"])(filtered, currentPage, pageSize); // console.log(books);
+      // const books = paginate(this.state.filteredBooks, currentPage, pageSize);
+      // this.setState({
+      //     filteredBooks: books,
+      //     totalCount: filtered.length
+      // })
+
       return {
         totalCount: filtered.length,
         data: books
       };
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "orderByRate", function (books) {
+      // this.books.p;
+      console.log(books);
     });
 
     return _this;
@@ -67664,14 +67677,14 @@ var BookList = /*#__PURE__*/function (_Component) {
                 categories = [{
                   id: "",
                   category_name: "All Categories"
-                }].concat(_toConsumableArray(categories));
-                console.log(books, categories);
+                }].concat(_toConsumableArray(categories)); // console.log(books, categories);
+
                 this.setState({
                   books: books,
                   categories: categories
                 });
 
-              case 9:
+              case 8:
               case "end":
                 return _context.stop();
             }
@@ -67687,6 +67700,9 @@ var BookList = /*#__PURE__*/function (_Component) {
     }()
   }, {
     key: "render",
+    //  orderByRate(else) {
+    //     console.log(books);
+    // }
     value: function render() {
       var _this$state2 = this.state,
           pageSize = _this$state2.pageSize,
@@ -67695,18 +67711,35 @@ var BookList = /*#__PURE__*/function (_Component) {
 
       var _this$getPagedData = this.getPagedData(),
           totalCount = _this$getPagedData.totalCount,
-          books = _this$getPagedData.data;
+          books = _this$getPagedData.data; // const { filteredBooks}=this.state;
+      // console.log(books);
+      // console.log(this.state.books.length===0)
 
-      console.log(this.state.books.length === 0);
+
       if (this.state.books.length === 0) return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("h3", null, "no books in data base");
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_2___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
         "class": "container"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
         "class": "row"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+        "class": "col-md-6"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_searchBox__WEBPACK_IMPORTED_MODULE_6__["default"], {
         value: searchQuery,
         onChange: this.handleSearch
       })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+        "class": "col-md-6"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+        "class": "d-flex"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("p", null, "oreder by"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("button", {
+        type: "button",
+        name: "rateOrder",
+        id: "rate",
+        className: "btn btn-info",
+        onClick: function onClick() {
+          books.pop();
+          console.log(books);
+        }
+      }, "rate")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
         "class": "row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
         "class": "col-lg-3"
@@ -68052,8 +68085,8 @@ function paginate(items, pageNumber, pageSize) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\Laravel\laravel-library\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\Laravel\laravel-library\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/esraa/opensource/larvel/Laravel-Library/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/esraa/opensource/larvel/Laravel-Library/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

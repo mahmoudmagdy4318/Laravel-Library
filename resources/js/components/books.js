@@ -7,15 +7,16 @@ import SearchBox from "./searchBox";
 import { paginate } from "../utils/paginate";
 import _ from "lodash";
 
-
 class BookList extends Component {
     state = {
         books: [],
+        filteredBooks: [],
         categories: [],
         selectedCategory: null,
         searchQuery: "",
         currentPage: 1,
-        pageSize: 6
+        pageSize: 6,
+        totalCount: 0
     };
 
     async componentDidMount() {
@@ -26,12 +27,12 @@ class BookList extends Component {
             { id: "", category_name: "All Categories" },
             ...categories
         ];
-        console.log(books, categories);
+        // console.log(books, categories);
         this.setState({ books, categories });
     }
 
     handleCategorySelect = category => {
-        console.log(category);
+        // console.log(category);
         this.setState({
             selectedCategory: category,
             searchQuery: "",
@@ -67,22 +68,60 @@ class BookList extends Component {
             );
         } else if (selectedCategory && selectedCategory.id)
             filtered = allBooks.filter(b => b.cat_id === selectedCategory.id);
+        // console.log(filtered);
 
         const books = paginate(filtered, currentPage, pageSize);
+        // console.log(books);
+        // const books = paginate(this.state.filteredBooks, currentPage, pageSize);
+        // this.setState({
+        //     filteredBooks: books,
+        //     totalCount: filtered.length
+        // })
         return { totalCount: filtered.length, data: books };
     };
+    orderByRate = books => {
+        // this.books.p;
+        console.log(books);
+    };
+    //  orderByRate(else) {
+    //     console.log(books);
+    // }
 
     render() {
         const { pageSize, currentPage, searchQuery } = this.state;
         const { totalCount, data: books } = this.getPagedData();
-        console.log(this.state.books.length===0)
-
-        if (this.state.books.length===0) return( <h3>no books in data base</h3>);
+        // const { filteredBooks}=this.state;
+        // console.log(books);
+        // console.log(this.state.books.length===0)
+        if (this.state.books.length === 0)
+            return <h3>no books in data base</h3>;
         return (
             <React.Fragment>
                 <div class="container">
                     <div class="row">
-                            <SearchBox value={searchQuery} onChange={this.handleSearch} />
+                        <div class="col-md-6">
+                            <SearchBox
+                                value={searchQuery}
+                                onChange={this.handleSearch}
+                            />
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <p>oreder by</p>
+                                <button
+                                    type="button"
+                                    name="rateOrder"
+                                    id="rate"
+                                    className="btn btn-info"
+                                    onClick={() => {
+                                        books.pop();
+                                        console.log(books);
+                                    }}
+                                >
+                                    rate
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-3">
