@@ -47248,7 +47248,7 @@ function manualDispatchChangeEvent(nativeEvent) {
   // doesn't, we manually listen for the events and so we have to enqueue and
   // process the abstract event manually.
   //
-  // Batching is necessary here in order to ensure that all event handlers run
+  // Batching is necessary here in order                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           to ensure that all event handlers run
   // before the next rerender (including event handlers attached to ancestor
   // elements instead of directly on the input). Without this, controlled
   // components don't work properly in conjunction with event bubbling because
