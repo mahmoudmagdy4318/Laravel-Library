@@ -37,7 +37,8 @@
             <div class="col-8">
                 {!! Form::open(['route' => ['comment.store']]) !!}
                     <div class="form-group formTextArea">
-                        {!! Form::textArea('comment_body', null, ['class' => 'form-control textAreaField', 'placeholder' => 'Write Your Comment...']) !!}  
+                        دا شغال
+                        {!! Form::textArea('comment_body', null, ['class' => 'form-control textAreaField', 'placeholder' => 'Write Your Comment...']) !!}
                     </div>
                     {{ Form::hidden('book_id', $book->id) }}
                     {!! Form::submit('Comment', ['class' => 'btn btn-primary col-12']) !!}
@@ -122,7 +123,7 @@ $(document).ready(function () {
             type: 'POST',
             data: {_token: CSRF_TOKEN, book_rate: book_rate, book_id: book_id},
             dataType: 'JSON',
-            success: function (data) { 
+            success: function (data) {
                 let bookRate = data.avgBookRate;
                 console.log(bookRate);
                 $(".bookRateContainer").html("");
@@ -149,7 +150,7 @@ $(document).ready(function () {
             type: 'POST',
             data: {_token: CSRF_TOKEN, comment_rate: comment_rate, comment_id: comment_id},
             dataType: 'JSON',
-            success: function (data) { 
+            success: function (data) {
                 let commentRate = data.avgCommentRate;
                 console.log(average_comment_rate_container);
                 average_comment_rate_container.html("");

@@ -68052,8 +68052,8 @@ function paginate(items, pageNumber, pageSize) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\Laravel\laravel-library\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\Laravel\laravel-library\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/magdy/Laravel/Library/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/magdy/Laravel/Library/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

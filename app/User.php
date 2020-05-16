@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'isAdmin'
     ];
 
     /**
@@ -40,7 +40,7 @@ class User extends Authenticatable
     // Comments OneToMany Relationship
     public function comments()
     {
-        return $this->hasMany('App\Comment','user_id');
+        return $this->hasMany('App\Comment', 'user_id');
     }
     // Book Rates OneToMany Relationship
     public function bookRates()
