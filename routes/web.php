@@ -55,3 +55,6 @@ Route::middleware([Admin::class, "auth"])->group(function () {
     Route::get('/home/admin', 'AdminController@home')->name('admin.home');
 });
 Route::resource('categories', 'CategoryController');
+Route::resource('favouritebooks', 'FavouriteBooksController')->only([
+    'index', 'store', 'destroy'
+])->middleware('auth');

@@ -47,4 +47,8 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\BookRate', 'user_id');
     }
+    public function favouriteBooks()
+    {
+        return $this->belongsToMany('App\Book','user_faviourite_books');
+    }
 }

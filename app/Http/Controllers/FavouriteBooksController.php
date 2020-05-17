@@ -3,14 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Auth;
-use App\User;
-use App\Book;
-use App\Comment;
-use App\BookRate;
-use App\Category;
+use Illuminate\Support\Facades\Auth;
 
-class BookController extends Controller
+class FavouriteBooksController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,11 +14,9 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::all()->sortBy('created_at');
-        $categories = Category::all();
-        $user = Auth::user();
-        $favouriteBooks=$user->favouriteBooks;
-        return ['books' => $books, 'categories' => $categories, 'favouriteBooks'=> $favouriteBooks];
+        // dd($request);
+    $user= Auth::user();
+    return $user->favouriteBooks;
     }
 
     /**
@@ -44,10 +37,14 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request);
+        $user = Auth::user();
+        $user->favouriteBooks()->attach($request->bookId);
+        return response('Book is added to favourites successfully', 200);
+           
     }
 
-    /**
+    /**0
      * Display the specified resource.
      *
      * @param  int  $id
@@ -55,10 +52,7 @@ class BookController extends Controller
      */
     public function show($id)
     {
-
-        $book = Book::find($id);
-        $userRate = BookRate::where('user_id', Auth::id())->first();
-        return view("books.show", ['book' => $book, 'comments' => $book->comments, 'user_rate' => $userRate->book_rate]);
+        //
     }
 
     /**
@@ -92,6 +86,8 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = Auth::user();
+        $user->favouriteBooks()->detach($id);
+        return response('Book is deleted from favourites successfully', 200);
     }
 }

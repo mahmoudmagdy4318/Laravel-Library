@@ -1,11 +1,16 @@
 import ReactDOM from "react-dom";
 import React, { Component } from "react";
 import { getBooks } from "../services/bookService";
+import { storeFavavouriteBook } from "../services/bookService";
+import { deleteFavouriteBook } from "../services/bookService";
 import ListGroup from "./listGroup";
 import Pagination from "./pagination";
 import SearchBox from "./searchBox";
 import { paginate } from "../utils/paginate";
 import _ from "lodash";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+;
 
 class BookList extends Component {
     state = {
@@ -16,7 +21,8 @@ class BookList extends Component {
         searchQuery: "",
         currentPage: 1,
         pageSize: 6,
-        totalCount: 0
+        totalCount: 0,
+        favourites:[]
     };
 
     async componentDidMount() {
@@ -27,8 +33,9 @@ class BookList extends Component {
             { id: "", category_name: "All Categories" },
             ...categories
         ];
+        const favourites = Object.values(data.favouriteBooks);
         // console.log(books, categories);
-        this.setState({ books, categories });
+        this.setState({ books, categories, favourites });
     }
 
     handleCategorySelect = category => {
@@ -69,27 +76,46 @@ class BookList extends Component {
         } else if (selectedCategory && selectedCategory.id)
             filtered = allBooks.filter(b => b.cat_id === selectedCategory.id);
         // console.log(filtered);
+          // this.setState({
+        //     // filteredBooks: books,
+        //     totalCount: filtered.length
+        // })
 
         const books = paginate(filtered, currentPage, pageSize);
-        // console.log(books);
+        console.log(books);
         // const books = paginate(this.state.filteredBooks, currentPage, pageSize);
         // this.setState({
-        //     filteredBooks: books,
+        //     // filteredBooks: books,
         //     totalCount: filtered.length
         // })
         return { totalCount: filtered.length, data: books };
     };
     orderByRate = books => {
         // this.books.p;
-        console.log(books);
+        // console.log(books);
     };
-    //  orderByRate(else) {
-    //     console.log(books);
-    // }
+
+    toggleIcon = (id, event) => {
+        this.setState(
+            state => ({ [id]: !state[id] }),
+            () => {
+                if (this.state[id] == true) {
+                    storeFavavouriteBook(id).then(response => {
+                        console.log(response);
+                    });
+                } else if (this.state[id] == false) {
+                    deleteFavouriteBook(id).then(response => {
+                        this.setState({ [id]: undefined });
+                    });
+                }
+            }
+        );
+    };
 
     render() {
         const { pageSize, currentPage, searchQuery } = this.state;
         const { totalCount, data: books } = this.getPagedData();
+
         // const { filteredBooks}=this.state;
         // console.log(books);
         // console.log(this.state.books.length===0)
@@ -219,11 +245,29 @@ class BookList extends Component {
                                                 <p class="card-text">
                                                     {book.book_description}
                                                 </p>
+
+                                                <FontAwesomeIcon
+                                                    id={book.id}
+                                                    icon={faHeart}
+                                                    size="2x"
+                                                    color={
+                                                        this.state[book.id]
+                                                            ? "red"
+                                                            : "lightgray"
+                                                    }
+                                                    onClick={event =>
+                                                        this.toggleIcon(
+                                                            book.id,
+                                                            event
+                                                        )
+                                                    }
+                                                />
                                             </div>
+
                                             <div class="card-footer">
                                                 <small class="text-muted">
                                                     &#9733; &#9733; &#9733;
-                                                    &#9733; &#9734;
+                                                    &#9733; &#9734; &#9829;
                                                 </small>
                                             </div>
                                         </div>
