@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Book;
 use App\LeasedBooks;
+use DB;
+use  \Carbon\Carbon;
 
 class LeasesBooksController extends Controller
 {
@@ -17,7 +19,18 @@ class LeasesBooksController extends Controller
      */
     public function index()
     {
-        //
+        $weeksData=[];
+        $weekNum=[];
+        $byweek = LeasedBooks::all()->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('W');
+        });
+        foreach ($byweek as $key => $value){
+            array_push($weeksData,$value->sum('payed'));
+            array_push($weekNum,$key);
+
+        }
+ 
+    return ['data'=>$weeksData,'weekNum'=>$weekNum];
     }
 
     /**
