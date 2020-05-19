@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 use App\Book;
+use App\LeasedBooks;
 
 class LeasesBooksController extends Controller
 {
@@ -37,17 +38,15 @@ class LeasesBooksController extends Controller
      */
     public function store(Request $request)
     {
-        // try {
             $user = Auth::user();
+        if (LeasedBooks::where([
+            ['user_id', '=', $user->id],
+            ['book_id', '=' , $request->bookId ]
+            ])->exists() == false)  {
             $Book = Book::where('id', $request->bookId)->decrement('quantity', 1);
-
+        }
             $user->leasedBooks()->syncWithoutDetaching([$request->bookId => ['payed' => $request->payed,'days' => $request->days]]);
             return response('Book is added to leased successfully', 200);
-// >attach($request->bookId, ['payed' => $request->payed, 'days' => $request->days])
-        // } catch (\Illuminate\Database\QueryException $e) {
-        //     return response('you already added this book');
-        // }
-
     
     }
 

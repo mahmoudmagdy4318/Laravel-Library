@@ -39,6 +39,7 @@ class FavouriteBooksController extends Controller
     {
         // dd($request);
         $user = Auth::user();
+      
         $user->favouriteBooks()->syncWithoutDetaching($request->bookId);
         return response('Book is added to favourites successfully', 200);
            
