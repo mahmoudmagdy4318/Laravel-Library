@@ -49,6 +49,10 @@ class User extends Authenticatable
     }
     public function favouriteBooks()
     {
-        return $this->belongsToMany('App\Book','user_faviourite_books');
+        return $this->belongsToMany('App\Book', 'user_faviourite_books')->withTimestamps();
+    }
+    public function leasedBooks()
+    {
+        return $this->belongsToMany('App\Book', 'user_leased_books')->using('App\LeasedBooks')->withTimestamps();
     }
 }

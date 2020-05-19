@@ -29,4 +29,8 @@ class Book extends Model
     {
         return $this->belongsToMany('App\User');
     }
+    public function usersLeasedBooks()
+    {
+        return $this->belongsToMany('App\User')->using('App\LeasedBooks');
+    }
 }

@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { getBooks } from "../services/bookService";
 import { storeFavavouriteBook } from "../services/bookService";
 import { deleteFavouriteBook } from "../services/bookService";
+import { storeLeasedBook } from "../services/bookService";
 import ListGroup from "./listGroup";
 import Pagination from "./pagination";
 import SearchBox from "./searchBox";
@@ -10,7 +11,23 @@ import { paginate } from "../utils/paginate";
 import _ from "lodash";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-;
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import { makeStyles } from "@material-ui/core/styles";
+import Alert from "@material-ui/lab/Alert";
+// const useStyles = makeStyles((theme) => ({
+//     root: {
+//         width: '100%',
+//         '& > * + *': {
+//             marginTop: theme.spacing(2),
+//         },
+//     },
+// }));
 
 class BookList extends Component {
     state = {
@@ -22,9 +39,16 @@ class BookList extends Component {
         currentPage: 1,
         pageSize: 6,
         totalCount: 0,
-        favourites:[]
+        favourites: [],
+        open: false,
+        setOpen: false,
+        total: 0,
+        InputVal: null,
+        bookName: "",
+        bookPrice: 0,
+        bookId: null,
+        error: null
     };
-
     async componentDidMount() {
         const { data } = await getBooks();
         const books = Object.values(data.books);
@@ -76,13 +100,13 @@ class BookList extends Component {
         } else if (selectedCategory && selectedCategory.id)
             filtered = allBooks.filter(b => b.cat_id === selectedCategory.id);
         // console.log(filtered);
-          // this.setState({
+        // this.setState({
         //     // filteredBooks: books,
         //     totalCount: filtered.length
         // })
 
         const books = paginate(filtered, currentPage, pageSize);
-        console.log(books);
+        // console.log(books);
         // const books = paginate(this.state.filteredBooks, currentPage, pageSize);
         // this.setState({
         //     // filteredBooks: books,
@@ -111,14 +135,52 @@ class BookList extends Component {
             }
         );
     };
+    handleClickOpen = book => {
+        this.setState({
+            setOpen: true,
+            open: true,
+            bookName: book.book_title,
+            bookPrice: book.price_per_day,
+            bookId: book.id
+        });
+    };
+
+    calcToatal = event => {
+        let total = 0;
+        const { bookPrice } = this.state;
+        if (isNaN(event.target.value) || isNaN(bookPrice)) {
+            total = 0;
+            this.setState({ total: total });
+        } else {
+            total = parseInt(event.target.value) * parseInt(bookPrice);
+            this.setState({ total: total, InputVal: event.target.value });
+        }
+    };
+    handleClose = flag => {
+        if (flag == 1) {
+            this.setState({ setOpen: false, open: false });
+        } else if (flag == 2) {
+            const { total, InputVal, bookId } = this.state;
+            storeLeasedBook(bookId, total, parseInt(InputVal))
+                .then(response => {
+                    console.log(response)
+                    this.setState({ setOpen: false, open: false, total: 0,error:response.data });
+                })
+            
+        }
+        // if (flag == 1) {
+
+        // } else if (flag == 2) {
+        //     storeLeasedBook()
+        //     this.setState({ setOpen: false, open: false });
+        // }
+    };
 
     render() {
-        const { pageSize, currentPage, searchQuery } = this.state;
+        const { pageSize, currentPage, searchQuery, error, total } = this.state;
         const { totalCount, data: books } = this.getPagedData();
+        // const classes = useStyles();
 
-        // const { filteredBooks}=this.state;
-        // console.log(books);
-        // console.log(this.state.books.length===0)
         if (this.state.books.length === 0)
             return <h3>no books in data base</h3>;
         return (
@@ -226,9 +288,21 @@ class BookList extends Component {
                                     <span class="sr-only">Next</span>
                                 </a>
                             </div>
+                            {error &&
+                                <Alert
+                                    severity="info"
+                                    onClose={() => {this.setState({error:null}); }}
+                                >
+                                    {error}
+                                </Alert>
+                            }
                             <div class="row">
+                              
                                 {books.map((book, index) => (
-                                    <div class="col-lg-4 col-md-6 mb-4">
+                                    <div
+                                        class="col-lg-4 col-md-6 mb-4"
+                                        key={index}
+                                    >
                                         <div class="card h-100">
                                             <a href="#">
                                                 <img
@@ -265,14 +339,71 @@ class BookList extends Component {
                                             </div>
 
                                             <div class="card-footer">
-                                                <small class="text-muted">
+                                                {/* <small class="text-muted">
                                                     &#9733; &#9733; &#9733;
                                                     &#9733; &#9734; &#9829;
-                                                </small>
+                                                </small> */}
+                                                <Button
+                                                    variant="outlined"
+                                                    color="primary"
+                                                    onClick={() =>
+                                                        this.handleClickOpen(
+                                                            book
+                                                        )
+                                                    }
+                                                    id={book.id}
+                                                >
+                                                    Lease
+                                                </Button>
                                             </div>
                                         </div>
                                     </div>
                                 ))}
+                               
+                                <Dialog
+                                    open={this.state.open}
+                                    onClose={() => this.handleClose(1)}
+                                    aria-labelledby="form-dialog-title"
+                                    fullWidth={true}
+                                    maxWidth={"sm"}
+                                >
+                                    <DialogTitle id="form-dialog-title">
+                                        Lease {this.state.bookName}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText></DialogContentText>
+                                        <TextField
+                                            autoFocus
+                                            margin="dense"
+                                            id="name"
+                                            label="number of days"
+                                            type="number"
+                                            fullWidth
+                                            onChange={event =>
+                                                this.calcToatal(event)
+                                            }
+                                        />
+                                        <p class="mt-2">
+                                            You should pay
+                                            {total}
+                                        </p>
+                                     
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button
+                                            onClick={() => this.handleClose(1)}
+                                            color="primary"
+                                        >
+                                            Cancel
+                                        </Button>
+                                        <Button
+                                            onClick={() => this.handleClose(2)}
+                                            color="primary"
+                                        >
+                                            Lease
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
                             </div>
                             <div class="row">
                                 <div class="col-9">

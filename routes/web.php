@@ -58,3 +58,6 @@ Route::resource('categories', 'CategoryController');
 Route::resource('favouritebooks', 'FavouriteBooksController')->only([
     'index', 'store', 'destroy'
 ])->middleware('auth');
+Route::resource('leasedBooks', 'LeasesBooksController')->only([
+    'index', 'store'
+])->middleware('auth');

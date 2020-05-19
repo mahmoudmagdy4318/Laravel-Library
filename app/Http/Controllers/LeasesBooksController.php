@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class FavouriteBooksController extends Controller
+use Illuminate\Support\Facades\Auth;
+use App\Book;
+
+class LeasesBooksController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +16,7 @@ class FavouriteBooksController extends Controller
      */
     public function index()
     {
-        // dd($request);
-    $user= Auth::user();
-    return $user->favouriteBooks;
+        //
     }
 
     /**
@@ -37,14 +37,21 @@ class FavouriteBooksController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
-        $user = Auth::user();
-        $user->favouriteBooks()->syncWithoutDetaching($request->bookId);
-        return response('Book is added to favourites successfully', 200);
-           
+        // try {
+            $user = Auth::user();
+            $Book = Book::where('id', $request->bookId)->decrement('quantity', 1);
+
+            $user->leasedBooks()->syncWithoutDetaching([$request->bookId => ['payed' => $request->payed,'days' => $request->days]]);
+            return response('Book is added to leased successfully', 200);
+// >attach($request->bookId, ['payed' => $request->payed, 'days' => $request->days])
+        // } catch (\Illuminate\Database\QueryException $e) {
+        //     return response('you already added this book');
+        // }
+
+    
     }
 
-    /**0
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -86,8 +93,6 @@ class FavouriteBooksController extends Controller
      */
     public function destroy($id)
     {
-        $user = Auth::user();
-        $user->favouriteBooks()->detach($id);
-        return response('Book is deleted from favourites successfully', 200);
+        //
     }
 }
