@@ -101855,20 +101855,22 @@ module.exports = function(module) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/**
+/* WEBPACK VAR INJECTION */(function(global) {/**
  * First we will load all of this project's JavaScript dependencies which
  * includes React and other helpers. It's a great starting point while
  * building robust, powerful web applications using React + Laravel.
  */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
+global.$ = global.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 /**
  * Next, we will create a fresh React component instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-
 __webpack_require__(/*! ./components/books */ "./resources/js/components/books.js");
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
 /***/ }),
 
@@ -102702,8 +102704,8 @@ function paginate(items, pageNumber, pageSize) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/esraa/opensource/larvel/Laravel-Library/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/esraa/opensource/larvel/Laravel-Library/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /media/eslam/2C2E5B3A2E5AFC70/ITI/Other lost files/39-Laravel/LibraryProject/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /media/eslam/2C2E5B3A2E5AFC70/ITI/Other lost files/39-Laravel/LibraryProject/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

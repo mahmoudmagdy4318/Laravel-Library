@@ -4,7 +4,7 @@
  * building robust, powerful web applications using React + Laravel.
  */
 require('./bootstrap');
-
+global.$ = global.jQuery = require('jquery');
 /**
  * Next, we will create a fresh React component instance and attach it to
  * the page. Then, you may begin adding components to this application
