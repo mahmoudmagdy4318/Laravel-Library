@@ -78,9 +78,9 @@
             </div>
         </div>
     </nav>
-    <div id="app"></div>
 
-    <!-- <script defer src="js/app.js"></script> -->
+    <div id="fav"></div>
+
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
 

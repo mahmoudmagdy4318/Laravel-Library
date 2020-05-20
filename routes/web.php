@@ -18,9 +18,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::get('/books/list', function () {
     return view('react');
 });
+
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -56,8 +59,11 @@ Route::middleware([Admin::class, "auth"])->group(function () {
 });
 Route::resource('categories', 'CategoryController');
 Route::resource('favouritebooks', 'FavouriteBooksController')->only([
-    'index', 'store', 'destroy'
+'index','store', 'destroy'
 ])->middleware('auth');
 Route::resource('leasedBooks', 'LeasesBooksController')->only([
     'index', 'store'
 ])->middleware('auth');
+Route::get('/myfavourites', function () {
+    return view('favourite');
+});

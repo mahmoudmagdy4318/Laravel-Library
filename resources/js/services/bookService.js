@@ -7,6 +7,9 @@ const leasedBookApi ="/leasedBooks";
 export async function getBooks() {
     return await http.get(apiEndpoint);
 }
+export function getFavavouriteBooks() {
+    return http.get(favouriteBookApi);
+}
 export function storeFavavouriteBook(bookId){
     return http.post(favouriteBookApi, { bookId: bookId });
 }
