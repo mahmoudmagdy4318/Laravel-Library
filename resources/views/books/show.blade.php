@@ -18,7 +18,7 @@
                     <p class="bookFonts"> {{ $book->book_description }}</p>
                 </div>
                 <p class="bookFonts">{{ $book->quantity }} Copies Available</p>
-                <button class="btn btn-success" >Lease</button>
+                <button class="btn btn-success" id="LeaseBook" >Lease</button>
             </div>
             <div class="col-3">
                 <p class="BoldFont">Fav This Book</p>
@@ -161,6 +161,20 @@ $(document).ready(function () {
                     else
                         average_comment_rate_container.append('<i class="fa fa-star-o" aria-hidden="true"></i>');
                 }
+            }
+        });
+    });
+    // Lease Book
+    $("#LeaseBook").on("click", function(e){
+        let book_id = <?php echo $book->id; ?>;
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url:'/leasedBooks',
+            type: 'POST',
+            data: {_token: CSRF_TOKEN, book_id: book_id},
+            dataType: 'JSON',
+            success: function (data) {
+                console.log(data)
             }
         });
     });
