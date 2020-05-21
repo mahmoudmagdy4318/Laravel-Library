@@ -14,7 +14,7 @@ class FavouriteBook extends Component {
     async componentDidMount() {
         const { data } = await getFavavouriteBooks();
         this.setState({ favs: data }, () => {
-            this.state.favs.forEach((book) => {
+            this.state.favs.forEach(book => {
                 this.setState(state => ({ [book.id]: !state[book.id] }));
             });
         });
@@ -62,6 +62,11 @@ class FavouriteBook extends Component {
                                         <p class="card-text">
                                             {book.book_description}
                                         </p>
+                                        <p class="card-text">
+                                            <a href={"book/" + book.id}>
+                                                book details
+                                            </a>
+                                        </p>
 
                                         <FontAwesomeIcon
                                             id={book.id}
@@ -79,13 +84,13 @@ class FavouriteBook extends Component {
                                     </div>
 
                                     <div class="card-footer">
-                                        <Button
+                                        {/* <Button
                                             variant="outlined"
                                             color="primary"
                                             id={book.id}
                                         >
                                             Lease
-                                        </Button>
+                                        </Button> */}
                                     </div>
                                 </div>
                             </div>

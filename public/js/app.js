@@ -101855,22 +101855,24 @@ module.exports = function(module) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/**
+/* WEBPACK VAR INJECTION */(function(global) {/**
  * First we will load all of this project's JavaScript dependencies which
  * includes React and other helpers. It's a great starting point while
  * building robust, powerful web applications using React + Laravel.
  */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
+global.$ = global.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 /**
  * Next, we will create a fresh React component instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-
 __webpack_require__(/*! ./components/favouritebooks */ "./resources/js/components/favouritebooks.js");
 
 __webpack_require__(/*! ./components/books */ "./resources/js/components/books.js");
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
 /***/ }),
 
@@ -102015,14 +102017,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
- // const useStyles = makeStyles((theme) => ({
-//     root: {
-//         width: '100%',
-//         '& > * + *': {
-//             marginTop: theme.spacing(2),
-//         },
-//     },
-// }));
+
 
 var BookList = /*#__PURE__*/function (_Component) {
   _inherits(BookList, _Component);
@@ -102047,6 +102042,8 @@ var BookList = /*#__PURE__*/function (_Component) {
       selectedCategory: null,
       searchQuery: "",
       currentPage: 1,
+      orderByRate: false,
+      orderBylatest: false,
       pageSize: 6,
       totalCount: 0,
       favourites: [],
@@ -102089,37 +102086,38 @@ var BookList = /*#__PURE__*/function (_Component) {
           currentPage = _this$state.currentPage,
           selectedCategory = _this$state.selectedCategory,
           searchQuery = _this$state.searchQuery,
-          allBooks = _this$state.books;
+          allBooks = _this$state.books,
+          orderByRate = _this$state.orderByRate,
+          orderBylatest = _this$state.orderBylatest;
       var filtered = allBooks;
 
       if (searchQuery) {
         filtered = allBooks.filter(function (b) {
           return b.book_title.toLowerCase().startsWith(searchQuery.toLowerCase());
         });
-      } else if (selectedCategory && selectedCategory.id) filtered = allBooks.filter(function (b) {
-        return b.cat_id === selectedCategory.id;
-      }); // console.log(filtered);
-      // this.setState({
-      //     // filteredBooks: books,
-      //     totalCount: filtered.length
-      // })
+      } else if (selectedCategory && selectedCategory.id) {
+        filtered = allBooks.filter(function (b) {
+          return b.cat_id === selectedCategory.id;
+        });
+      }
 
+      if (orderByRate) {
+        filtered = allBooks.sort(function (a, b) {
+          return parseInt(b.rate) - parseInt(a.rate);
+        });
+      }
 
-      var books = Object(_utils_paginate__WEBPACK_IMPORTED_MODULE_7__["paginate"])(filtered, currentPage, pageSize); // console.log(books);
-      // const books = paginate(this.state.filteredBooks, currentPage, pageSize);
-      // this.setState({
-      //     // filteredBooks: books,
-      //     totalCount: filtered.length
-      // })
+      if (orderBylatest) {
+        filtered = allBooks.sort(function (a, b) {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+      }
 
+      var books = Object(_utils_paginate__WEBPACK_IMPORTED_MODULE_7__["paginate"])(filtered, currentPage, pageSize);
       return {
         totalCount: filtered.length,
         data: books
       };
-    });
-
-    _defineProperty(_assertThisInitialized(_this), "orderByRate", function (books) {// this.books.p;
-      // console.log(books);
     });
 
     _defineProperty(_assertThisInitialized(_this), "toggleIcon", function (id, event) {
@@ -102180,8 +102178,7 @@ var BookList = /*#__PURE__*/function (_Component) {
             InputVal = _this$state2.InputVal,
             bookId = _this$state2.bookId;
         Object(_services_bookService__WEBPACK_IMPORTED_MODULE_3__["storeLeasedBook"])(bookId, total, parseInt(InputVal)).then(function (response) {
-          console.log(response);
-
+          // console.log(response)
           _this.setState({
             setOpen: false,
             open: false,
@@ -102275,16 +102272,29 @@ var BookList = /*#__PURE__*/function (_Component) {
         "class": "col-md-6"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
         "class": "d-flex"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("p", null, "oreder by"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("button", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("h4", {
+        "class": "mt-4 mr-2"
+      }, "oreder by"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("button", {
         type: "button",
         name: "rateOrder",
         id: "rate",
-        className: "btn btn-info",
+        className: "btn btn-info mt-3",
         onClick: function onClick() {
-          books.pop();
-          console.log(books);
+          _this2.setState({
+            orderByRate: true
+          });
         }
-      }, "rate")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      }, "rate"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("button", {
+        type: "button",
+        name: "latestOrder",
+        id: "latest",
+        className: "btn btn-info ml-3  mt-3",
+        onClick: function onClick() {
+          _this2.setState({
+            orderBylatest: true
+          });
+        }
+      }, "latest")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
         "class": "row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
         "class": "col-lg-3"
@@ -102378,7 +102388,12 @@ var BookList = /*#__PURE__*/function (_Component) {
           "class": "card-title"
         }, book.book_title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("h5", null, "$24.99"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("p", {
           "class": "card-text"
-        }, book.book_description), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_10__["FontAwesomeIcon"], {
+        }, book.book_description), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("p", {
+          "class": "card-text"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("a", {
+          href: "book/" + book.id,
+          target: "_blanck"
+        }, "book details")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_10__["FontAwesomeIcon"], {
           id: book.id,
           icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_9__["faHeart"],
           size: "2x",
@@ -102618,7 +102633,11 @@ var FavouriteBook = /*#__PURE__*/function (_Component) {
           "class": "card-title"
         }, book.book_title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("h5", null, book.price_per_day, "$"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("p", {
           "class": "card-text"
-        }, book.book_description), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_5__["FontAwesomeIcon"], {
+        }, book.book_description), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("p", {
+          "class": "card-text"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("a", {
+          href: "book/" + book.id
+        }, "book details")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_5__["FontAwesomeIcon"], {
           id: book.id,
           icon: _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_4__["faHeart"],
           size: "2x",
@@ -102628,11 +102647,7 @@ var FavouriteBook = /*#__PURE__*/function (_Component) {
           }
         })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
           "class": "card-footer"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_6__["default"], {
-          variant: "outlined",
-          color: "primary",
-          id: book.id
-        }, "Lease"))));
+        })));
       }))));
     }
   }]);

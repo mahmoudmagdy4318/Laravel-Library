@@ -19,13 +19,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/books/list', function () {
+Route::get('/bookslist', function () {
     return view('react');
 });
 
 
 Auth::routes();
 
+// Books & Comments & Rates Routes
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/comment', 'CommentController@store')->name('comment.store')->middleware('auth');
 Route::get('/book/{book}', 'BookController@show')->name('book')->middleware('auth');
@@ -33,6 +34,7 @@ Route::get('/book/{book}', 'BookController@show')->name('book')->middleware('aut
 Route::post('/bookrate', 'BookRateController@store')->name('bookrate.store')->middleware('auth');
 Route::post('/commentrate', 'CommentRateController@store')->name('commentrate.store')->middleware('auth');
 Route::get('/books', 'BookController@index')->name('book.index')->middleware('auth');
+// ========================================
 
 Route::middleware([Admin::class, "auth"])->group(function () {
     Route::resource('admins', 'AdminController');

@@ -55,10 +55,12 @@ class BookController extends Controller
      */
     public function show($id)
     {
-
         $book = Book::find($id);
         $userRate = BookRate::where('user_id', Auth::id())->first();
-        return view("books.show", ['book' => $book, 'comments' => $book->comments, 'user_rate' => $userRate->book_rate]);
+        if($userRate)
+            return view("books.show", ['book' => $book, 'comments' => $book->comments, 'user_rate' => $userRate->book_rate]);
+        else
+            return view("books.show", ['book' => $book, 'comments' => $book->comments, 'user_rate' => 0]);
     }
 
     /**

@@ -20,14 +20,6 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
 import Alert from "@material-ui/lab/Alert";
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         width: '100%',
-//         '& > * + *': {
-//             marginTop: theme.spacing(2),
-//         },
-//     },
-// }));
 
 class BookList extends Component {
     state = {
@@ -37,6 +29,8 @@ class BookList extends Component {
         selectedCategory: null,
         searchQuery: "",
         currentPage: 1,
+        orderByRate:false,
+        orderBylatest: false,
         pageSize: 6,
         totalCount: 0,
         favourites: [],
@@ -89,7 +83,9 @@ class BookList extends Component {
             currentPage,
             selectedCategory,
             searchQuery,
-            books: allBooks
+            books: allBooks,
+            orderByRate,
+            orderBylatest
         } = this.state;
 
         let filtered = allBooks;
@@ -97,27 +93,22 @@ class BookList extends Component {
             filtered = allBooks.filter(b =>
                 b.book_title.toLowerCase().startsWith(searchQuery.toLowerCase())
             );
-        } else if (selectedCategory && selectedCategory.id)
+        } else if (selectedCategory && selectedCategory.id) {
             filtered = allBooks.filter(b => b.cat_id === selectedCategory.id);
-        // console.log(filtered);
-        // this.setState({
-        //     // filteredBooks: books,
-        //     totalCount: filtered.length
-        // })
-
+        }
+        if (orderByRate) {
+            filtered = allBooks.sort((a, b) => parseInt(b.rate) -  parseInt(a.rate));
+        }
+           if (orderBylatest) {
+               filtered = allBooks.sort(
+                   (a, b) => new Date(b.created_at) - new Date(a.created_at)
+               );
+           }
         const books = paginate(filtered, currentPage, pageSize);
-        // console.log(books);
-        // const books = paginate(this.state.filteredBooks, currentPage, pageSize);
-        // this.setState({
-        //     // filteredBooks: books,
-        //     totalCount: filtered.length
-        // })
+
         return { totalCount: filtered.length, data: books };
     };
-    orderByRate = books => {
-        // this.books.p;
-        // console.log(books);
-    };
+    
 
     toggleIcon = (id, event) => {
         this.setState(
@@ -161,12 +152,17 @@ class BookList extends Component {
             this.setState({ setOpen: false, open: false });
         } else if (flag == 2) {
             const { total, InputVal, bookId } = this.state;
-            storeLeasedBook(bookId, total, parseInt(InputVal))
-                .then(response => {
-                    console.log(response)
-                    this.setState({ setOpen: false, open: false, total: 0,error:response.data });
-                })
-            
+            storeLeasedBook(bookId, total, parseInt(InputVal)).then(
+                response => {
+                    // console.log(response)
+                    this.setState({
+                        setOpen: false,
+                        open: false,
+                        total: 0,
+                        error: response.data
+                    });
+                }
+            );
         }
         // if (flag == 1) {
 
@@ -195,18 +191,29 @@ class BookList extends Component {
                         </div>
                         <div class="col-md-6">
                             <div class="d-flex">
-                                <p>oreder by</p>
+                                <h4 class="mt-4 mr-2">oreder by</h4>
                                 <button
                                     type="button"
                                     name="rateOrder"
                                     id="rate"
-                                    className="btn btn-info"
+                                    className="btn btn-info mt-3"
                                     onClick={() => {
-                                        books.pop();
-                                        console.log(books);
+                                        this.setState({ orderByRate: true });
                                     }}
+
                                 >
                                     rate
+                                </button>
+                                <button
+                                    type="button"
+                                    name="latestOrder"
+                                    id="latest"
+                                    className="btn btn-info ml-3  mt-3"
+                                    onClick={() => {
+                                        this.setState({ orderBylatest: true });
+                                    }}
+                                >
+                                    latest
                                 </button>
                             </div>
                         </div>
@@ -288,16 +295,17 @@ class BookList extends Component {
                                     <span class="sr-only">Next</span>
                                 </a>
                             </div>
-                            {error &&
+                            {error && (
                                 <Alert
                                     severity="info"
-                                    onClose={() => {this.setState({error:null}); }}
+                                    onClose={() => {
+                                        this.setState({ error: null });
+                                    }}
                                 >
                                     {error}
                                 </Alert>
-                            }
+                            )}
                             <div class="row">
-                              
                                 {books.map((book, index) => (
                                     <div
                                         class="col-lg-4 col-md-6 mb-4"
@@ -318,6 +326,14 @@ class BookList extends Component {
                                                 <h5>$24.99</h5>
                                                 <p class="card-text">
                                                     {book.book_description}
+                                                </p>
+                                                <p class="card-text">
+                                                    <a
+                                                        href={"book/" + book.id}
+                                                        target="_blanck"
+                                                    >
+                                                        book details
+                                                    </a>
                                                 </p>
 
                                                 <FontAwesomeIcon
@@ -359,7 +375,7 @@ class BookList extends Component {
                                         </div>
                                     </div>
                                 ))}
-                               
+
                                 <Dialog
                                     open={this.state.open}
                                     onClose={() => this.handleClose(1)}
@@ -387,7 +403,6 @@ class BookList extends Component {
                                             You should pay
                                             {total}
                                         </p>
-                                     
                                     </DialogContent>
                                     <DialogActions>
                                         <Button

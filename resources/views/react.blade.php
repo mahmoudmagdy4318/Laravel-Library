@@ -35,7 +35,7 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('books/list') }}">Books</a>
+                        <a class="nav-link" href="{{ url('bookslist') }}">Books</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('myfavourites') }}">Favourites</a>
